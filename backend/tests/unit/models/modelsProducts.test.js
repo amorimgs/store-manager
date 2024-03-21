@@ -5,7 +5,7 @@ const connection = require('../../../src/models/connection');
 
 const { expect } = chai;
 
-describe('Usando o método GET em /products', function () {
+describe('Testando Models Products', function () {
   const resultStub = [[
     {
       id: 1,
