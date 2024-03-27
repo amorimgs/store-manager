@@ -8,6 +8,9 @@ const servicesSales = require('../../../src/services/servicesSales');
 const { expect } = chai;
 
 describe('Testando Services', function () {
+  afterEach(function () {
+    sinon.restore();
+  });
   describe('Testando Products', function () {
     const resultStub = [
       {
@@ -24,10 +27,6 @@ describe('Testando Services', function () {
       },
     ];
     
-    afterEach(function () {
-      sinon.restore();
-    });
-  
     it('Retorna a lista completa de products!', async function () {
       sinon.stub(modelsProducts, 'getAllProducts').returns(resultStub);
       const result = await servicesProducts.getProducts();
@@ -48,6 +47,12 @@ describe('Testando Services', function () {
       sinon.stub(modelsProducts, 'getProductsById').resolves(undefined);
       const result = await servicesProducts.getProductsById(123);
       expect(result.status).to.be.equal('NOT_FOUND');
+    });
+
+    it('Cadastra um Produto!', async function () {
+      sinon.stub(modelsProducts, 'insertProduct').resolves({ id: 4, name: 'ProductX' });
+      const result = await servicesProducts.insertProduct('ProductX');
+      expect(result.status).to.be.equal('CREATED');
     });
   });
   describe('Testando Sales', function () {
@@ -72,10 +77,6 @@ describe('Testando Services', function () {
         quantity: 15,
       },
     ];
-    
-    afterEach(function () {
-      sinon.restore();
-    });
   
     it('Retorna a lista completa de sales!', async function () {
       sinon.stub(modelsSales, 'getAllSales').returns(resultStub);

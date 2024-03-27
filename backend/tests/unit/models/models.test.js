@@ -7,27 +7,26 @@ const modelsSales = require('../../../src/models/modelsSales');
 const { expect } = chai;
 
 describe('Testando Models', function () {
+  afterEach(function () {
+    sinon.restore();
+  });
+
   describe('Testanndo Products', function () {
-    const resultStub = [[
-      {
-        id: 1,
-        name: 'Martelo de Thor',
-      },
-      {
-        id: 2,
-        name: 'Traje de encolhimento',
-      },
-      {
-        id: 3,
-        name: 'Escudo do Capitão América',
-      },
-    ]];
-  
-    afterEach(function () {
-      sinon.restore();
-    });
-  
     it('Retorna a lista completa de products!', async function () {
+      const resultStub = [[
+        {
+          id: 1,
+          name: 'Martelo de Thor',
+        },
+        {
+          id: 2,
+          name: 'Traje de encolhimento',
+        },
+        {
+          id: 3,
+          name: 'Escudo do Capitão América',
+        },
+      ]];
       sinon.stub(connection, 'execute').returns(resultStub);
       const result = await modelsProducts.getAllProducts();
       expect(result).to.be.length(3);
@@ -46,6 +45,12 @@ describe('Testando Models', function () {
       sinon.stub(connection, 'execute').resolves([[]]);
       const result = await modelsProducts.getProductsById(123);
       expect(result).to.be.equal(undefined);
+    });
+
+    it('Cadastra um podruto', async function () {
+      sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
+      const result = await modelsProducts.insertProduct('ProdutoX');
+      expect(result.id).to.be.equal(4);
     });
   });
   describe('Testando Sales', function () {
@@ -71,9 +76,6 @@ describe('Testando Models', function () {
       },
     ]];
   
-    afterEach(function () {
-      sinon.restore();
-    });
     it('Retorna a lista completa de sales!', async function () {
       sinon.stub(connection, 'execute').returns(resultGetAll);
       const result = await modelsSales.getAllSales();

@@ -6,7 +6,7 @@ const STATUS_CODE = {
   UNPROCESSABLE_ENTITY: 422,
 };
 
-const validateName = async (req, res, next) => {
+const validateName = (req, res, next) => {
   const { name } = req.body;
   if (name === undefined) {
     return res.status(STATUS_CODE.BAD_REQUEST)

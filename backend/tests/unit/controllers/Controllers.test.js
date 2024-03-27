@@ -16,9 +16,6 @@ describe('Testando Controlers', function () {
   });
  
   describe('Testando Products', function () {
-    afterEach(function () {
-      sinon.restore();
-    });
     it('Retorna a lista completa de products!', async function () {
       const data = [
         {
@@ -83,7 +80,7 @@ describe('Testando Controlers', function () {
         status: sinon.stub().returnsThis(),
         json: sinon.stub(), 
       };
-      sinon.stub(servicesSales, 'getSalesById').resolves({
+      sinon.stub(servicesProducts, 'getProductsById').resolves({
         status: 'NOT_FOUND',
         data: {
           message: 'Product not found',
@@ -93,6 +90,31 @@ describe('Testando Controlers', function () {
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({
         message: 'Product not found',
+      });
+    });
+    it('Cadastrar um produto!', async function () {
+      const req = {
+        body: {
+          name: 'Test',
+        },
+      };
+      const res = {
+        // status: sinon.stub().returns(res),
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(), 
+      };
+      sinon.stub(servicesProducts, 'insertProduct').resolves({
+        status: 'CREATED',
+        data: {
+          id: 5,
+          name: 'Test',
+        },
+      });
+      await controlersProducts.insertProduct(req, res);
+      expect(res.status).to.have.been.calledWith(201);
+      expect(res.json).to.have.been.calledWith({
+        id: 5,
+        name: 'Test',
       });
     });
   });
