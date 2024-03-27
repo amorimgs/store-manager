@@ -1,13 +1,11 @@
-const express = require('express');
 const servicesProducts = require('../services/servicesProducts');
-
-const app = express();
-
-app.use(express.json());
 
 const STATUS_CODE = {
   SUCCESS: 200,
+  CREATED: 201,
   NOT_FOUND: 404,
+  BAD_REQUEST: 400,
+  UNPROCESSABLE_ENTITY: 422,
 };
 
 const getProducts = async (req, res) => {
@@ -21,4 +19,10 @@ const getProductsById = async (req, res) => {
   return res.status(STATUS_CODE[result.status]).json(result.data);
 };
 
-module.exports = { getProducts, getProductsById };
+const insertProduct = async (req, res) => {
+  const { name } = req.body;
+  const result = await servicesProducts.insertProduct(name);
+  return res.status(STATUS_CODE[result.status]).json(result.data);
+};
+
+module.exports = { getProducts, getProductsById, insertProduct };
