@@ -17,5 +17,11 @@ app.post('/products', middlewares.validateName, controlerProducts.insertProduct)
 
 app.get('/sales', controlerSales.getSales);
 app.get('/sales/:id', controlerSales.getSalesById);
+app.post(
+  '/sales',
+  middlewares.validateProductId,
+  middlewares.validateQuantity,
+  controlerSales.insertSale,
+);
 
 module.exports = app;
