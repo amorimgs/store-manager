@@ -26,14 +26,12 @@ const validateProductId = async (req, res, next) => {
   const sales = req.body;
   
   const notProductId = sales.some((sale) => sale.productId === undefined);
-
   if (notProductId) {
     return res.status(STATUS_CODE.BAD_REQUEST).json({ message: '"productId" is required' });
   }
 
   const products = await servicesProducts.getProducts();
   const verifyId = sales.every((p) => products.data.map((el) => el.id).includes(p.productId));
-
   if (!verifyId) {
     return res.status(STATUS_CODE.NOT_FOUND).json({ message: 'Product not found' });
   }

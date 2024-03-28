@@ -52,6 +52,12 @@ describe('Testando Models', function () {
       const result = await modelsProducts.insertProduct('ProdutoX');
       expect(result.id).to.be.equal(4);
     });
+
+    it('Atualiza um podruto', async function () {
+      sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
+      const result = await modelsProducts.updateProduct(1, 'Teste');
+      expect(result.id).to.be.equal(1);
+    });
   });
   describe('Testando Sales', function () {
     const date = '2024-03-24T02:49:04.000Z';
@@ -98,6 +104,19 @@ describe('Testando Models', function () {
       sinon.stub(connection, 'execute').resolves([[]]);
       const result = await modelsSales.getSalesById(123);
       expect(result).to.have.length(0);
+    });
+    it('Cadastra um sale', async function () {
+      sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
+      const result = await modelsSales.insertSale('ProdutoX');
+      expect(result.id).to.be.equal(4);
+    });
+    it('Cadastra um saleProduct', async function () {
+      sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
+      const result = await modelsSales.insertSaleProduct([
+        { productId: 1, quantity: 1, saleId: 3 },
+        { productId: 2, quantity: 5, saleId: 3 },
+      ]);
+      expect(result).to.be.have.length(2);
     });
   });
 }); 

@@ -54,6 +54,19 @@ describe('Testando Services', function () {
       const result = await servicesProducts.insertProduct('ProductX');
       expect(result.status).to.be.equal('CREATED');
     });
+
+    it('Atualiza um Produto!', async function () {
+      sinon.stub(modelsProducts, 'updateProduct').resolves({ id: 1, name: 'ProductX' });
+      const result = await servicesProducts.updateProduct(1, 'ProductX');
+      expect(result.status).to.be.equal('SUCCESS');
+    });
+
+    it('Atualiza um Produto não existente!', async function () {
+      sinon.stub(modelsProducts, 'updateProduct').resolves({ id: 1, name: 'ProductX' });
+      sinon.stub(modelsProducts, 'getProductsById').resolves(undefined);
+      const result = await servicesProducts.updateProduct(999, 'ProductX');
+      expect(result.status).to.be.equal('NOT_FOUND');
+    });
   });
   describe('Testando Sales', function () {
     const date = '2024-03-24T02:49:04.000Z';
@@ -103,6 +116,14 @@ describe('Testando Services', function () {
       sinon.stub(modelsSales, 'getSalesById').resolves([]);
       const result = await servicesSales.getSalesById(123);
       expect(result.status).to.be.equal('NOT_FOUND');
+    });
+
+    it('Insert sale!', async function () {
+      sinon.stub(modelsSales, 'insertSale').resolves(3);
+      sinon.stub(modelsSales, 'insertSaleProduct').resolves([{ productId: 1, quantity: 1 }, { productId: 2, quantity: 5 }]);
+
+      const result = await servicesSales.insertSale([{ productId: 1, quantity: 1 }, { productId: 2, quantity: 5 }]);
+      expect(result.status).to.be.equal('CREATED');
     });
   });
 }); 
