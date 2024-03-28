@@ -14,6 +14,7 @@ app.get('/', (_request, response) => {
 app.get('/products', controlerProducts.getProducts);
 app.get('/products/:id', controlerProducts.getProductsById);
 app.post('/products', middlewares.validateName, controlerProducts.insertProduct);
+app.put('/products/:id', middlewares.validateName, controlerProducts.updateProduct);
 
 app.get('/sales', controlerSales.getSales);
 app.get('/sales/:id', controlerSales.getSalesById);
