@@ -6,6 +6,7 @@ const STATUS_CODE = {
   NOT_FOUND: 404,
   BAD_REQUEST: 400,
   UNPROCESSABLE_ENTITY: 422,
+  DELETED: 204,
 };
 
 const getProducts = async (req, res) => {
@@ -32,7 +33,14 @@ const updateProduct = async (req, res) => {
   return res.status(STATUS_CODE[result.status]).json(result.data);
 };
 
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const result = await servicesProducts.deleteProduct(id);
+  return res.status(STATUS_CODE[result.status]).json(result.data);
+};
+
 module.exports = { getProducts,
   getProductsById,
   insertProduct,
-  updateProduct };
+  updateProduct,
+  deleteProduct };
